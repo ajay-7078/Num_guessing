@@ -3,78 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Number Guessing Game</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="../styles.css">
-    <script type="module" src="script4.js"></script>
 </head>
-<main class="wrap" role="main">
-<section>
-<header>
-<h1>BMI Calculator</h1>
-<p class="lead">Responsive BMI calculator — enter weight and height to see your BMI and category.</p>
-</header>
+<body style="background-color:#212121; color:#fff;">
 
+    <div id="wrapper">
+      <h1>Number guessing game</h1>
+    <p>Try and guess a random number between 1 and 100.</p>
+    <p>You have 10 attempts to guess the right number.</p>
+    </br>
+        <form class="form">
+            <label2 for="guessField" id="guess">Guess a number</label>
+            <input type="text" id="guessField" class="guessField">
+            <input type="submit" id="subt" value="Submit guess" class="guessSubmit">
+        </form>
 
-<form id="bmiForm" class="controls" onsubmit="return false;" aria-label="BMI calculator form">
-<div>
-<label for="weight">Weight (kg)</label>
-<div class="field">
-<input id="weight" name="weight" type="number" min="20" max="300" step="0.1" value="70" required aria-describedby="weightHelp">
-</div>
-<div id="weightHelp" class="meta">Enter your weight in kilograms.</div>
-</div>
-
-
-<div>
-<label for="height">Height (cm)</label>
-<div class="field">
-<input id="height" name="height" type="number" min="80" max="250" step="0.1" value="170" required aria-describedby="heightHelp">
-</div>
-<div id="heightHelp" class="meta">Enter your height in centimeters.</div>
-</div>
-
-
-<div>
-<label for="age">Age (optional)</label>
-<input id="age" name="age" type="number" min="1" max="120" step="1" class="" placeholder="e.g. 25" aria-describedby="ageHelp">
-<div id="ageHelp" class="meta">Age won't affect BMI calculation but may help contextual tips.</div>
-</div>
-
-
-<div class="row">
-<div class="col">
-<button class="btn-primary" id="calcBtn" type="button">Calculate</button>
-</div>
-<div class="col">
-<button class="btn-ghost" id="resetBtn" type="button">Reset</button>
-</div>
-</div>
-</form>
-</section>
-
-
-<aside class="result" aria-live="polite">
-<div>
-<div class="meta">Your BMI</div>
-<div class="bignum" id="bmiValue">—</div>
-<div id="bmiCategory" class="category" style="visibility:hidden">—</div>
-</div>
-
-
-<div class="tips" id="bmiTips">Enter values and press Calculate to see results and tips.</div>
-
-
-<div style="margin-top:6px;font-size:12px;color:var(--muted)">BMI categories (WHO):
-<ul style="margin:6px 0 0 18px;padding:0;color:var(--muted)">
-<li>&lt; 18.5 — Underweight</li>
-<li>18.5 — 24.9 — Normal weight</li>
-<li>25 — 29.9 — Overweight</li>
-<li>&ge; 30 — Obesity</li>
-</ul>
-</div>
-</aside>
-</main>
+        <div class="resultParas">
+            <p >Previous Guesses: <span class="guesses"></span></p>
+            <p >Guesses Remaining: <span class="lastResult">10</span></p>
+            <p class="lowOrHi"></p>
+        </div>
+    </div>
+    <script src="chaiaurcode.js"></script>
 </body>
 </html>
-

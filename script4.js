@@ -1,66 +1,93 @@
 
-const weight = document.getElementById('weight');
-const height = document.getElementById('height');
-const age = document.getElementById('age');
-const calcBtn = document.getElementById('calcBtn');
-const resetBtn = document.getElementById('resetBtn');
-const bmiValue = document.getElementById('bmiValue');
-const bmiCategory = document.getElementById('bmiCategory');
-const bmiTips = document.getElementById('bmiTips');
+let randomNumber = parseInt(Math.random() * 100 + 1);
 
+const submit = document.querySelector('#subt');
+const userInput = document.querySelector('#guessField');
+const guessSlot = document.querySelector('.guesses');
+const remaining = document.querySelector('.lastResult');
+const lowOrHi = document.querySelector('.lowOrHi');
+const startOver = document.querySelector('.resultParas');
 
-function calculateBMI(){
-const w = parseFloat(weight.value);
-const hcm = parseFloat(height.value);
-if(!w || !hcm) return;
-const h = hcm / 100;
-const bmi = w / (h*h);
-const rounded = Math.round(bmi * 10) / 10;
-bmiValue.textContent = rounded;
+const p = document.createElement('p');
 
+let prevGuess = [];
+let numGuess = 1;
 
-// category
-let cat = '';
-let cls = '';
-let tips = '';
-if (rounded < 18.5){
-cat = 'Underweight'; cls='cat-underweight';
-tips = 'You are below the normal BMI range. Consider a balanced diet with more calories and strength training. Consult a nutritionist if needed.';
-} else if (rounded < 25){
-cat = 'Normal'; cls='cat-normal';
-tips = 'Great — your BMI is in the normal range. Maintain a balanced diet and regular activity to keep it up.';
-} else if (rounded < 30){
-cat = 'Overweight'; cls='cat-overweight';
-tips = 'You are above the normal range. Consider a mix of cardio and strength training and review your calorie intake.';
-} else {
-cat = 'Obese'; cls='cat-obese';
-tips = 'BMI indicates obesity. It may be helpful to consult a healthcare professional for a personalised plan.';
+let playGame = true;
+
+if (playGame) {
+  submit.addEventListener('click', function (e) {
+    e.preventDefault();
+    const guess = parseInt(userInput.value);
+    console.log(guess);
+    validateGuess(guess);
+  });
 }
 
-
-bmiCategory.className = 'category '+cls;
-bmiCategory.textContent = cat;
-bmiCategory.style.visibility = 'visible';
-bmiTips.textContent = tips;
-
-
-// accessibility focus
-bmiValue.setAttribute('tabindex','-1');
-bmiValue.focus();
+function validateGuess(guess) {
+  if (isNaN(guess)) {
+    alert('PLease enter a valid number');
+  } else if (guess < 1) {
+    alert('PLease enter a number more than 1');
+  } else if (guess > 100) {
+    alert('PLease enter a  number less than 100');
+  } else {
+    prevGuess.push(guess);
+    if (numGuess === 11) {
+      displayGuess(guess);
+      displayMessage(`Game Over. Random number was ${randomNumber}`);
+      endGame();
+    } else {
+      displayGuess(guess);
+      checkGuess(guess);
+    }
+  }
 }
 
+function checkGuess(guess) {
+  if (guess === randomNumber) {
+    displayMessage(`You guessed it right`);
+    endGame();
+  } else if (guess < randomNumber) {
+    displayMessage(`Number is TOOO low`);
+  } else if (guess > randomNumber) {
+    displayMessage(`Number is TOOO High`);
+  }
+}
 
-calcBtn.addEventListener('click', calculateBMI);
-resetBtn.addEventListener('click', ()=>{
-weight.value = 70; height.value = 170; age.value=''; bmiValue.textContent = '—'; bmiCategory.style.visibility='hidden'; bmiTips.textContent = 'Enter values and press Calculate to see results and tips.';
-});
+function displayGuess(guess) {
+  userInput.value = '';
+  guessSlot.innerHTML += `${guess}, `;
+  numGuess++;
+  remaining.innerHTML = `${11 - numGuess} `;
+}
 
+function displayMessage(message) {
+  lowOrHi.innerHTML = `<h2>${message}</h2>`;
+}
 
-// calculate on Enter inside inputs
-[weight,height,age].forEach(el=>el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') calculateBMI(); }));
+function endGame() {
+  userInput.value = '';
+  userInput.setAttribute('disabled', '');
+  p.classList.add('button');
+  p.innerHTML = `<h2 id="newGame">Start new Game</h2>`;
+  startOver.appendChild(p);
+  playGame = false;
+  newGame();
+}
 
+function newGame() {
+  const newGameButton = document.querySelector('#newGame');
+  newGameButton.addEventListener('click', function (e) {
+    randomNumber = parseInt(Math.random() * 100 + 1);
+    prevGuess = [];
+    numGuess = 1;
+    guessSlot.innerHTML = '';
+    remaining.innerHTML = `${11 - numGuess} `;
+    userInput.removeAttribute('disabled');
+    startOver.removeChild(p);
 
-// small enhancement: live calc when pressing up/down quickly
-let timer;
-[weight,height].forEach(el=>el.addEventListener('input', ()=>{ clearTimeout(timer); timer = setTimeout(()=>{/* no-op; user can press Calculate */}, 400); }));
+    playGame = true;
+  });
+}
 
